@@ -1,10 +1,12 @@
 import React from 'react';
 import { connect } from 'react-redux';
+import { Link } from 'react-router';
 
 import { getTracks } from './actions/tracks';
 import Menu from './Menu';
 
-const App = ({ tracks, onAddTrack, onFindTrack, onGetTracks }) => {
+const App = ({ tracks, onAddTrack, onFindTrack, onGetTracks, ownProps }) => {
+  console.log('ownProps', ownProps);
   let trackInput = '';
   let searchInput = '';
 
@@ -35,7 +37,9 @@ const App = ({ tracks, onAddTrack, onFindTrack, onGetTracks }) => {
       </div>
       <ul>
         {tracks.map((track, index) =>
-          <li key={index}>{track.name}</li>
+          <li key={index}>
+            <Link to={`/tracks/${track.id}`}>{track.name}</Link>
+          </li>
         )}
       </ul>
     </div>
@@ -43,8 +47,9 @@ const App = ({ tracks, onAddTrack, onFindTrack, onGetTracks }) => {
 }
 
 export default connect(
-  state => ({
-    tracks: state.tracks.filter(track => track.name.includes(state.filterTracks))
+  (state, ownProps) => ({
+    tracks: state.tracks.filter(track => track.name.includes(state.filterTracks)),
+    ownProps
   }),
   dispatch => ({
     onAddTrack: (name) => {
